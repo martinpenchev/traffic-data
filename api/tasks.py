@@ -1,14 +1,7 @@
 from __future__ import absolute_import
 from celery import shared_task
 from .models import Repository, TrafficEvent
-
-def github_api_fetch(url, auth_token):
-    regex = r'^(?:https?:\/\/github\.com\/)([a-zA-Z0-9-_]+)(?:\/)([a-zA-Z0-9-_]+)(?:\/?)$'
-    owner, repo_name = re.match(regex, url).group(1, 2)
-    github_data = requests.get(
-                    'https://api.github.com/repos/{}/{}/traffic/views'.format(owner, repo_name),
-                    headers={"Authorization":"Token {}".format(str(auth_token))})
-    return github_data.json()
+from .services import github_api_fetch
 
 # Fetch GITHUB api daily
 @shared_task()

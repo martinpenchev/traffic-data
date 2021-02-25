@@ -1,5 +1,3 @@
-import re
-import requests
 from uuid import uuid4
 
 from rest_framework import status
@@ -17,6 +15,9 @@ from .permissions import HasToken
 # Models
 from django.contrib.auth import get_user_model
 from .models import Repository, TrafficEvent
+
+# Github fetch service
+from .services import github_api_fetch
 
 class UserCreate(APIView):
 
@@ -87,26 +88,25 @@ class RepoCreate(APIView):
         if serializer.is_valid():
             token = request.META.get('HTTP_X_API_TOKEN')
             user = get_user_model().objects.get(token=str(token))
-            if Repository.objects.filter(url=serializer.validated_data.get('url')).exists():
+            url = serializer.validated_data.get('url')
+            auth_token = serializer.validated_data.get('auth_token')
+
+            # Check for duplicate repository
+            if Repository.objects.filter(url=url).exists():
                 return Response({"error":"The repository already exists"}, status=status.HTTP_400_BAD_REQUEST)
 
-            regex = r'^(?:https?:\/\/github\.com\/)([a-zA-Z0-9-_]+)(?:\/)([a-zA-Z0-9-_]+)(?:\/?)$'
-            owner, repo_name = re.match(regex, serializer.validated_data.get('url')).group(1, 2)
-            auth_token = serializer.validated_data.get('auth_token')
-            github_data = requests.get(
-                'https://api.github.com/repos/{}/{}/traffic/views'.format(owner, repo_name),
-                headers={"Authorization":"Token {}".format(str(auth_token))})
-            traffic_data = github_data.json()
+            # Fetch initial data
+            traffic_data = github_api_fetch(url, auth_token)
 
             # Check for github api errors
             if 'message' in traffic_data:
                 return Response({"error" : traffic_data['message']}, status=status.HTTP_400_BAD_REQUEST)
 
-            # Save model
+            # Save repository data
             serializer.save(user=user)
             repository_id = Repository.objects.filter(url=serializer.validated_data.get('url')).values('repository_id')[0]['repository_id']
 
-            # Fetch all existing data from the api
+            # Store initial traffic data
             for traffic_event in traffic_data['views']:
                 model = TrafficEvent()
                 repo_obj = Repository.objects.get(repository_id=repository_id)
