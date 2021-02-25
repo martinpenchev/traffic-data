@@ -27,4 +27,3 @@ python manage.py test
 ![Alt text](/screenshots/4.PNG?raw=true "Preview")
 ![Alt text](/screenshots/5.PNG?raw=true "Preview")
 ![Alt text](/screenshots/6.PNG?raw=true "Preview")
-![Alt text](/screenshots/7.PNG?raw=true "Preview")
