@@ -1,0 +1,18 @@
+{% extends 'users\base.html' %} {% load widget_tweaks %}
+<!--BLOCK CONTENT-->
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <form action="{% url 'users:home' %}" method="post" class="form-inline">
+            {% if token %}
+            <div class="text-muted">{{ token }}</div>
+            {% endif %} {% csrf_token %} {% for field in form %}
+            <div class="form-group {%if error %}alert alert-danger{%endif%}">
+                {{ error }} {{ field.label_tag }} {% render_field field class="form-control mx-3" %}
+            </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary px-5 my-2">Submit</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

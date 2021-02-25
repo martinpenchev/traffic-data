@@ -1,0 +1,54 @@
+{% extends 'users\base.html' %}
+<!--BASE TEMPLATE CONTENT-->
+
+{% block content %}
+<!--BLOCK CONTENT-->
+<div class="container justify-content-center">
+    {% if error %}
+    <div class="row justify-content-center">
+        <div class="alert alert-danger">{{ error }}</div>
+    </div>
+    {% endif %}
+    <div class="container w-75">
+        <div class="row justify-content-center">
+            <form action="{% url 'users:user-detail' token repository_id %}" method="GET" class="form-inline">
+                <div class="form-group">
+                    <label for="start" class="text-muted">Start Date: </label>
+                    <input id="start" name="start" type="text" class="form-control ml-2" />
+                    <div class="px-3">&nbsp;</div>
+                    <label for="end" class="text-muted">End Date: </label>
+                    <input id="end" name="end" type="text" class="form-control ml-2" />
+                    <div class="px-3">&nbsp;</div>
+                    <input type="submit" class="form-control btn btn-sm btn-secondary px-4" value="Apply" />
+                </div>
+            </form>
+        </div>
+        <div class="row justify-content-center">
+            <canvas id="chart"></canvas>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
+    <script type="text/javascript">
+        var config = {
+          type: 'bar',
+          data: {
+            datasets: [{
+              data: {{ counts|safe }},
+              backgroundColor: ['#696969', '#808080', '#A9A9A9', '#C0C0C0', '#D3D3D3'],
+              label: 'Views'
+            }],
+            labels: {{ labels|safe }}
+          },
+          options: {
+            responsive: true
+          }
+        };
+    
+        window.onload = function() {
+          var ctx = document.getElementById('chart').getContext('2d');
+          window.myPie = new Chart(ctx, config);
+        };
+    
+    </script>
+</div>
+{% endblock %}

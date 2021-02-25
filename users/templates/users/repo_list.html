@@ -1,0 +1,54 @@
+{% extends 'users\base.html' %}
+<!--BASE TEMPLATE CONTENT-->
+
+{% block content %}
+<!--BLOCK CONTENT-->
+<div class="container justify-content-center">
+    {% if error %}
+    <div class="row justify-content-center">
+        <div class="alert alert-danger">{{ error }}</div>
+    </div>
+    {% endif %}
+    <div class="row justify-content-center">
+        <form action="{% url 'users:user-list' token %}" method="GET" class="form-inline">
+            <div class="form-group">
+                <label for="start" class="text-muted">Start Date: </label>
+                <input id="start" name="start" type="text" class="form-control ml-2" />
+                <div class="px-3">&nbsp;</div>
+                <label for="end" class="text-muted">End Date: </label>
+                <input id="end" name="end" type="text" class="form-control ml-2" />
+                <div class="px-3">&nbsp;</div>
+                <input type="submit" class="form-control btn btn-sm btn-secondary px-4" value="Apply" />
+            </div>
+        </form>
+    </div>
+    <table class="table">
+        <thead>
+            <td>Id</td>
+            <td>Email</td>
+            <td>Url</td>
+            <td>Created</td>
+            <td>Traffic data</td>
+        </thead>
+        <tbody>
+            {% for repository in repositories %}
+            <tr>
+                <td>{{ repository.repository_id }}</td>
+                <td>{{ repository.user.email }}</td>
+                <td>{{ repository.url }}</td>
+                <td>{{ repository.created_at }}</td>
+                <td>
+                    <button class="btn btn-sm btn-warning px-4 mx-auto" onClick="window.location.href = '{% url 'users:user-detail' token repository.repository_id %}';">View</button>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5">
+                    <div class="alert alert-warning">No repositories were found</div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
