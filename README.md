@@ -21,10 +21,10 @@ python manage.py test
 ```
 
 ## Screenshots
-![Alt text](/screenshots/1.png?raw=true "Preview")
-![Alt text](/screenshots/2.png?raw=true "Preview")
-![Alt text](/screenshots/3.png?raw=true "Preview")
-![Alt text](/screenshots/4.png?raw=true "Preview")
-![Alt text](/screenshots/5.png?raw=true "Preview")
-![Alt text](/screenshots/6.png?raw=true "Preview")
-![Alt text](/screenshots/7.png?raw=true "Preview")
+![Alt text](/screenshots/1.PNG?raw=true "Preview")
+![Alt text](/screenshots/2.PNG?raw=true "Preview")
+![Alt text](/screenshots/3.PNG?raw=true "Preview")
+![Alt text](/screenshots/4.PNG?raw=true "Preview")
+![Alt text](/screenshots/5.PNG?raw=true "Preview")
+![Alt text](/screenshots/6.PNG?raw=true "Preview")
+![Alt text](/screenshots/7.PNG?raw=true "Preview")
